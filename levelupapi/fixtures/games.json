@@ -1,0 +1,26 @@
+[
+	{
+		"model": "levelupapi.game",
+		"pk": 1,
+		"fields": {
+			"title": "Ticket to Ride",
+			"maker": "Days of Wonder",
+			"number_of_players": 5,
+			"skill_level": 5,
+			"game_type_id": 1,
+			"gamer_id": 1
+		}
+	},
+	{
+		"model": "levelupapi.game",
+		"pk": 2,
+		"fields": {
+			"title": "The Settlers of Catan",
+			"maker": "Mayfair Games",
+			"number_of_players": 4,
+			"skill_level": 8,
+			"game_type_id": 1,
+			"gamer_id": 1
+		}
+	}
+]
