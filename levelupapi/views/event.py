@@ -50,15 +50,39 @@ class EventView(ViewSet):
         
         # retrieve game object from the dbase to make sure it really exists; data retrieved is held in request.data dictionary.
         game = Game.objects.get(pk=request.data["game"])
-        
-        try:
-            serializer = CreateEventSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(organizer=organizer)
-            serializer.save(game=game)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except ValidationError as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = CreateEventSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(organizer=organizer)
+        serializer.save(game=game)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def update(self, request, pk):
+        """Handle PUT requests for a game
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        event = Event.objects.get(pk=pk)
+        serializer = CreateEventSerializer(event, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
+#    def update(self, request, pk):
+#        """Handle PUT requests for an event
+
+#        Returns:
+#            Response -- Empty body with 204 status code
+#        """
+#        event = Event.objects.get(pk=pk)
+#        event.description = request.data["description"]
+#        event.date = request.data["date"]
+#        event.time = request.data["time"]
+#        event.game = Game.objects.get(pk=request.data['game'])
+#        event.save()
+
+#        return Response(status=status.HTTP_204_NO_CONTENT)
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events
     """
