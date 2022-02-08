@@ -44,14 +44,10 @@ class GameView(ViewSet):
             Response -- JSON serialized game instance
         """
         gamer = Gamer.objects.get(user=request.auth.user)
-        try:
-            serializer = CreateGameSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(gamer=gamer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except ValidationError as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
-            
+        serializer = CreateGameSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(gamer=gamer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 #        # retrieve gameType object from the dbase to make sure it really exists; data retrieved is held in request.data dictionary.
 #        game_type = GameType.objects.get(pk=request.data["game_type"])
