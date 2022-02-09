@@ -16,7 +16,7 @@ class GameView(ViewSet):
         """
         try:
             game = Game.objects.get(pk=pk)
-            serializer = GameSerializer(game)
+            serializer = CreateGameSerializer(game)
             return Response(serializer.data)
         except Game.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
