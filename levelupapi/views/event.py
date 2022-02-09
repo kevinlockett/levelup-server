@@ -3,6 +3,7 @@ from django.http import HttpResponseServerError
 from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import serializers, status
 from levelupapi.models import Event, Game, Gamer
 
@@ -64,7 +65,7 @@ class EventView(ViewSet):
             Response -- Empty body with 204 status code
         """
         event = Event.objects.get(pk=pk)
-        serializer = CreateEventSerializer(event, data=request.data)
+        serializer = EventSerializer(event, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
@@ -88,6 +89,24 @@ class EventView(ViewSet):
         event = Event.objects.get(pk=pk)
         event.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(methods=['post'], detail=True)
+    def signup(self, request, pk):
+        """Post request for a user to sign up for an event"""
+        
+        gamer = Gamer.objects.get(user=request.auth.user)
+        event = Event.objects.get(pk=pk)
+        event.attendees.add(gamer)
+        return Response({'message': 'Gamer added'}, status=status.HTTP_201_CREATED)
+    
+    @action(methods=['delete'], detail=True)
+    def leave(self, request, pk):
+        """Delete request for a user from an event"""
+        
+        gamer = Gamer.objects.get(user=request.auth.user)
+        event = Event.objects.get(pk=pk)
+        event.attendees.remove(gamer)
+        return Response({'message': 'Gamer removed from attendee list'}, status=status.HTTP_204_NO_CONTENT)
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events
     """
