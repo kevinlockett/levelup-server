@@ -63,11 +63,23 @@ class GameView(ViewSet):
 #            game_type=game_type
 #        )
 
-
 #        # created object is now serialized into dictionary version for json and returned to client
 #        serializer = GameSerializer(game)
 #        return Response(serializer.data)
 
+
+    def update(self, request, pk):
+        """Handle PUT requests for a game
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        game = Game.objects.get(pk=pk)
+        serializer = CreateGameSerializer(game, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
 #    def update(self, request, pk):
 #        """Handle PUT requests for a game
 
@@ -84,18 +96,6 @@ class GameView(ViewSet):
 
 #        return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def update(self, request, pk):
-        """Handle PUT requests for a game
-
-        Returns:
-            Response -- Empty body with 204 status code
-        """
-        game = Game.objects.get(pk=pk)
-        serializer = CreateGameSerializer(game, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
-    
     def destroy(self, request, pk):
         game = Game.objects.get(pk=pk)
         game.delete()
