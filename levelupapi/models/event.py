@@ -8,3 +8,13 @@ class Event(models.Model):
     organizer = models.ForeignKey("Gamer", on_delete=models.CASCADE, related_name='organizing')
     attendees = models.ManyToManyField("Gamer", through="EventGamer", related_name="attending")
     
+    # Custom property -- To get the property on the event it’s just event.joined
+    # no need for parenthesis and to use the setter: event.joined = True
+    @property
+    def joined(self):
+        return self.__joined
+    
+    @joined.setter
+    def joined(self, value):
+        self.__joined = value
+    

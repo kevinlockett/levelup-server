@@ -30,12 +30,18 @@ class EventView(ViewSet):
         Returns:
             Response -- JSON serialized list of events
         """
+        gamer = Gamer.objects.get(user=request.auth.user)
         events = Event.objects.all()
         
         #the next 3 lines filter events by game
         game = request.query_params.get('game', None)
         if game is not None:
             events = events.filter(game_id=game)
+            
+        # Set the `joined` property on every event
+        for event in events:
+            # Check to see if the gamer is in the attendees list on the event
+            event.joined = gamer in event.attendees.all()
         
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
@@ -47,14 +53,14 @@ class EventView(ViewSet):
             Response -- JSON serialized game instance
         """
         # getting the gamer that is logged in using the user's auth token
-        organizer = Gamer.objects.get(user=request.auth.user)
+        gamer = Gamer.objects.get(user=request.auth.user)
         
         # retrieve game object from the dbase to make sure it really exists; data retrieved is held in request.data dictionary.
         game = Game.objects.get(pk=request.data["game"])
 
         serializer = CreateEventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(organizer=organizer)
+        serializer.save(organizer=gamer)
         serializer.save(game=game)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
@@ -107,14 +113,15 @@ class EventView(ViewSet):
         event = Event.objects.get(pk=pk)
         event.attendees.remove(gamer)
         return Response({'message': 'Gamer removed from attendee list'}, status=status.HTTP_204_NO_CONTENT)
+
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events
     """
     class Meta:
         model = Event
         # fields = ('id', 'description', 'date', 'time', 'game_id')
-        fields = '__all__'
-        depth = 2
+        fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'attendees', 'joined')
+        depth = 1
         
 class CreateEventSerializer(serializers.ModelSerializer):
     """JSON serializer for adding new games
