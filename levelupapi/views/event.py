@@ -1,6 +1,3 @@
-from re import I
-from django.http import HttpResponseServerError
-from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -119,7 +116,6 @@ class EventSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Event
-        # fields = ('id', 'description', 'date', 'time', 'game_id')
         fields = ('id', 'game', 'organizer', 'description', 'date', 'time', 'attendees', 'joined')
         depth = 1
         
