@@ -2,7 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from levelupapi.models import Game, Gamer, GameType
+from levelupapi.models import Game, Gamer
 
 class GameView(ViewSet):
     """Level up games view"""
