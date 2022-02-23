@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-
 from levelupapi.models import GameType, Game
 
 class GameTests(APITestCase):
@@ -47,7 +46,9 @@ class GameTests(APITestCase):
 
         # Save the GameType to the testing database
         self.game_type.save()
-        
+                
+        # Create a new instance of GameType at Global Level -- the values can be imported with self. where needed in tests.        
+
         self.game = Game()
         self.game.gamer_id = 1
         self.game.title = "Sorry"
@@ -94,9 +95,6 @@ class GameTests(APITestCase):
         """
         Ensure we can GET an existing game.
         """
-
-        # Create a new instance of Game
-        
 
         # Define the URL path for getting a single Game
         url = f'/games/{self.game.id}'
@@ -165,6 +163,5 @@ class GameTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        
-    

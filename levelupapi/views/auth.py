@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import serializers, status
-
 from levelupapi.models import Gamer
 
 @api_view(['POST'])
@@ -14,7 +13,7 @@ def login_user(request):
     '''Handles the authentication of a gamer
 
     Method arguments:
-      request -- The full HTTP request object
+        request -- The full HTTP request object
     '''
     username = request.data['username']
     password = request.data['password']
@@ -42,7 +41,7 @@ def register_user(request):
     '''Handles the creation of a new gamer for authentication
 
     Method arguments:
-      request -- The full HTTP request object
+        request -- The full HTTP request object
     '''
 
     # Create a new user by invoking the `create_user` helper method
