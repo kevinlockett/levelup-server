@@ -10,9 +10,11 @@ router.register(r'games', GameView, 'game')
 router.register(r'gametypes', GameTypeView, 'gametype')
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('register', register_user),
-    path('login', login_user),
-    path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
+    path('login', login_user),
+    path('register', register_user),
+    path('', include(router.urls)),
+    path('', include('levelupreports.urls')),
+    path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
+

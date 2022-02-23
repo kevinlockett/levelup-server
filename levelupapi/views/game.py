@@ -19,6 +19,8 @@ class GameView(ViewSet):
             return Response(serializer.data)
         except Game.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+#        except Exception as ex:
+#            return HttpResponseServerError(ex)
 
     def list(self, request):
         """Handle GET requests to get all games
