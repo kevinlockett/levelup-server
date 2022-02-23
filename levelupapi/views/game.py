@@ -39,10 +39,9 @@ class GameView(ViewSet):
         return Response(serializer.data)
     
     def create(self, request):
-        """Handle POST operations
-
-        Returns:
-            Response -- JSON serialized game instance
+        """
+        Handle POST operations
+        Returns: Response -- JSON serialized game instance
         """
         gamer = Gamer.objects.get(user=request.auth.user)
         serializer = CreateGameSerializer(data=request.data)
@@ -111,7 +110,8 @@ class GameSerializer(serializers.ModelSerializer):
         depth = 1 # adds depth to serializer to embed nested data -- in this case game type and gamer
         
 class CreateGameSerializer(serializers.ModelSerializer):
-    """JSON serializer for adding new games
+    """
+    JSON serializer for adding new games
     """
     class Meta:
         model = Game
